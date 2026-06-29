@@ -1,3 +1,10 @@
 /.idea/
 /bin/
+/dist/
+# Locally cross-built release binaries. CI builds these in a clean runner, we
+# never want them committed. NOT a bare /hostess entry, that would also match
+# the hostess/ library directory.
+/hostess-v*
+*.test
+*.out
 .DS_Store

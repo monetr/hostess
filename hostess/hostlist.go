@@ -22,9 +22,9 @@ var ErrHostnameNotFound = errors.New("hostname not found")
 // Hostlist is a sortable set of Hostnames. When in a Hostlist, Hostnames must
 // follow some rules:
 //
-// 	- Hostlist may contain IPv4 AND IPv6 ("IP version" or "IPv") Hostnames.
-// 	- Names are only allowed to overlap if IP version is different.
-// 	- Adding a Hostname for an existing name will replace the old one.
+//   - Hostlist may contain IPv4 AND IPv6 ("IP version" or "IPv") Hostnames.
+//   - Names are only allowed to overlap if IP version is different.
+//   - Adding a Hostname for an existing name will replace the old one.
 //
 // The Hostlist uses a deterministic Sort order designed to make a hostfile
 // output look a particular way. Generally you don't need to worry about this
@@ -138,10 +138,10 @@ func (h Hostlist) Swap(i, j int) {
 
 // Sort this list of Hostnames, according to Hostlist sorting rules:
 //
-// 	1. localhost comes before other hostnames
-// 	2. IPv4 comes before IPv6
-// 	3. IPs are sorted in numerical order
-// 	4. The remaining hostnames are sorted in lexicographical order
+//  1. localhost comes before other hostnames
+//  2. IPv4 comes before IPv6
+//  3. IPs are sorted in numerical order
+//  4. The remaining hostnames are sorted in lexicographical order
 func (h *Hostlist) Sort() {
 	sort.Sort(*h)
 }

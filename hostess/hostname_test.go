@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	hostess2 "github.com/cbednarski/hostess/hostess"
+	hostess2 "github.com/monetr/hostess/hostess"
 )
 
 func TestHostname(t *testing.T) {

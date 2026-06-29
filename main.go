@@ -59,8 +59,20 @@ func ExitWithError(err error) {
 	}
 }
 
+// printUsage writes the help text but does NOT exit. wrappedMain calls this so
+// the no-command path can just return nil and stay testable; main() turns a nil
+// error into a clean exit 0 anyway, so the observable behavior is the same.
+func printUsage() {
+	// help has a %s placeholder for the platform's hosts path, so this has to be
+	// Printf and not Print otherwise we print the literal "%s" and tack the path
+	// on the end. go vet catches it if someone swaps it back.
+	fmt.Printf(help, hostess.GetHostsPath())
+}
+
+// Usage is the flag.Usage callback. flag invokes it on a parse error so it still
+// exits, but wrappedMain itself no longer calls os.Exit in the middle of a run.
 func Usage() {
-	fmt.Print(help, hostess.GetHostsPath())
+	printUsage()
 	os.Exit(0)
 }
 
@@ -76,11 +88,17 @@ func wrappedMain(args []string) error {
 	command := ""
 	if len(args) > 1 {
 		command = args[1]
-	} else {
-		Usage()
 	}
 
-	if err := cli.Parse(args[2:]); err != nil {
+	// args[2:] panics when hostess is run with no command at all (the original
+	// reason Usage() exited here), so only slice off the command when there
+	// actually is one. An empty command falls through to the help case below.
+	rest := []string{}
+	if len(args) > 2 {
+		rest = args[2:]
+	}
+
+	if err := cli.Parse(rest); err != nil {
 		return err
 	}
 
@@ -95,7 +113,10 @@ func wrappedMain(args []string) error {
 		return nil
 
 	case "", "-h", "--help", "help":
-		cli.Usage()
+		// Print help and return nil instead of exiting. main() exits 0 for a nil
+		// error so `hostess` with no args still prints help and exits cleanly,
+		// but now this path can run under a test without killing the process.
+		printUsage()
 		return nil
 
 	case "fmt":

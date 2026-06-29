@@ -1,20 +1,34 @@
-RELEASE_VERSION=$(shell git describe --tags)
+.PHONY: build test vet fmt fmt-check lint tidy install clean
+
+# NOTE There is a hostess/ library subdir, so `go build -o hostess .` writes the
+# binary INTO that directory instead of producing a ./hostess file. Build into
+# bin/ to dodge that collision. The release workflow does not have this problem
+# because it builds uniquely named hostess-<tag>-<os>-<arch> artifacts.
+build:
+	go build ./...
+	go build -o bin/hostess .
 
 test:
 	go test ./...
+
+vet:
 	go vet ./...
+
+fmt:
+	gofmt -w .
+
+fmt-check:
+	@out="$$(gofmt -l .)"; if [ -n "$$out" ]; then echo "gofmt needed:"; echo "$$out"; exit 1; fi
+
+lint: vet fmt-check
+
+tidy:
+	go mod tidy
 
 install:
 	go build -o bin/hostess .
 	sudo mv bin/hostess /usr/local/bin/hostess
 
-release: test
-	GOOS=windows GOARCH=amd64 go build -ldflags "-X main.Version=${RELEASE_VERSION}" -o bin/hostess_windows_amd64.exe .
-	GOOS=darwin  GOARCH=amd64 go build -ldflags "-X main.Version=${RELEASE_VERSION}" -o bin/hostess_macos_amd64 .
-	GOOS=linux   GOARCH=amd64 go build -ldflags "-X main.Version=${RELEASE_VERSION}" -o bin/hostess_linux_amd64 .
-	GOOS=linux   GOARCH=arm   go build -ldflags "-X main.Version=${RELEASE_VERSION}" -o bin/hostess_linux_arm .
-
 clean:
-	rm -rf ./bin/
-
-.PHONY: install test release clean
+	rm -rf bin dist
+	rm -f hostess-v*

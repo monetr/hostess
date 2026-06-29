@@ -19,10 +19,65 @@ and call it a day.
 
 ## Installation
 
-Download a [precompiled release](https://github.com/cbednarski/hostess/releases)
-from GitHub, or build from source (with a [recent version of Go](https://golang.org/dl)):
+hostess is distributed as pre-built binaries attached to each [GitHub
+release](https://github.com/monetr/hostess/releases). They are statically linked
+(CGO disabled), so there are no runtime dependencies, and each one is published
+alongside a `.sha256` checksum and a [Sigstore](https://www.sigstore.dev/)
+build-provenance attestation you can verify.
 
-    git clone https://github.com/cbednarski/hostess
+Binaries are built for `linux-amd64`, `linux-arm64`, `linux-arm`, `darwin-amd64`,
+`darwin-arm64`, `windows-amd64`, and `windows-arm64`. Each asset is named
+`hostess-<version>-<os>-<arch>`.
+
+### macOS and Linux
+
+With the [GitHub CLI](https://cli.github.com) you can grab the newest release for
+your platform in one step:
+
+    PLATFORM="linux-amd64" # or linux-arm64, linux-arm, darwin-amd64, darwin-arm64
+    gh release download --repo monetr/hostess --pattern "hostess-*-${PLATFORM}"
+    chmod +x hostess-*-"${PLATFORM}"
+    sudo mv hostess-*-"${PLATFORM}" /usr/local/bin/hostess
+
+Without it, download straight from the [latest
+release](https://github.com/monetr/hostess/releases/latest) (fill in the version
+shown there):
+
+    VERSION="v0.5.3" # the latest tag from the releases page
+    PLATFORM="linux-amd64"
+    curl -fsSL -o hostess \
+      "https://github.com/monetr/hostess/releases/download/${VERSION}/hostess-${VERSION}-${PLATFORM}"
+    chmod +x hostess
+    sudo mv hostess /usr/local/bin/hostess
+
+### Windows
+
+Download `hostess-<version>-windows-amd64.exe` (or `windows-arm64`) from the
+[latest release](https://github.com/monetr/hostess/releases/latest), or use the
+[GitHub CLI](https://cli.github.com):
+
+    gh release download --repo monetr/hostess --pattern "hostess-*-windows-amd64.exe"
+
+Rename it to `hostess.exe` and put it somewhere on your `PATH`. Remember the hosts
+file is protected, so run it from an elevated (_Run as administrator_) prompt.
+
+### Verifying a download
+
+Every release binary ships with a matching `.sha256` checksum and a
+build-provenance attestation, so you can confirm a download is intact and was
+actually built by this repo's release workflow:
+
+    # Checksum: download the .sha256 asset next to the binary, then
+    sha256sum -c hostess-v0.5.3-linux-amd64.sha256
+
+    # Provenance, using the GitHub CLI:
+    gh attestation verify hostess-v0.5.3-linux-amd64 --repo monetr/hostess
+
+### Build from source
+
+Build from source with a [recent version of Go](https://golang.org/dl):
+
+    git clone https://github.com/monetr/hostess
     cd hostess
     make install
 

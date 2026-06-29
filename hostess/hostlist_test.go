@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/cbednarski/hostess/hostess"
+	"github.com/monetr/hostess/hostess"
 )
 
 func TestAddDuplicate(t *testing.T) {

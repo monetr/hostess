@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cbednarski/hostess/hostess"
+	"github.com/monetr/hostess/hostess"
 )
 
 const ipv4Pass = `
