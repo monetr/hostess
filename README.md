@@ -1,4 +1,6 @@
-# hostess [![Linux Build Status](https://travis-ci.org/cbednarski/hostess.svg)](https://travis-ci.org/cbednarski/hostess) [![Windows Build Status](https://ci.appveyor.com/api/projects/status/wtxqb880b7v9dfgn/branch/master?svg=true)](https://ci.appveyor.com/project/cbednarski/hostess/branch/master) [![GoDoc](https://godoc.org/github.com/cbednarski/hostess?status.svg)](http://godoc.org/github.com/cbednarski/hostess)
+# hostess [![GoDoc](https://godoc.org/github.com/monetr/hostess?status.svg)](http://godoc.org/github.com/monetr/hostess)
+
+This is a fork of https://github.com/cbednarski/hostess
 
 An **idempotent** command-line utility for managing your `/etc/hosts`* file.
 
