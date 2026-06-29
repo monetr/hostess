@@ -1,3 +1,3 @@
-module github.com/cbednarski/hostess
+module github.com/monetr/hostess
 
 go 1.14

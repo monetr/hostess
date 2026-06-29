@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cbednarski/hostess/hostess"
+	"github.com/monetr/hostess/hostess"
 )
 
 const help = `An idempotent tool for managing %s
@@ -41,9 +41,9 @@ Configuration
 
 About
 
-    Copyright 2015-2020 Chris Bednarski <chris@cbednarski.com>; MIT Licensed
+    Copyright 2015-2020 Chris Bednarski <chris@monetr.com>; MIT Licensed
     Portions Copyright the Go authors, licensed under BSD-style license
-    Bugs and updates via https://github.com/cbednarski/hostess
+    Bugs and updates via https://github.com/monetr/hostess
 `
 
 var (

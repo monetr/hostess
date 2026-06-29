@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cbednarski/hostess/hostess"
+	"github.com/monetr/hostess/hostess"
 )
 
 // CopyHostsFile creates a temporary hosts file in the system temp directory,

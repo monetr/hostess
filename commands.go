@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/cbednarski/hostess/hostess"
+	"github.com/monetr/hostess/hostess"
 )
 
 var ErrParsingHostsFile = errors.New("Errors while parsing hostsfile. Please resolve any conflicts and try again.")
