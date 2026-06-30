@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.5.4](https://github.com/monetr/hostess/compare/v0.5.3...v0.5.4) (2026-06-30)
+
+
+### Bug Fixes
+
+* Bringing up to modern go standards ([fbbfd46](https://github.com/monetr/hostess/commit/fbbfd46a89d0d9adb2657091a9c255602382567f))
+
 ## [0.5.3](https://github.com/monetr/hostess/compare/v0.5.2...v0.5.3) (2026-06-30)
 
 
