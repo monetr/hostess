@@ -1,5 +1,33 @@
 # Change Log
 
+## [0.5.5](https://github.com/monetr/hostess/compare/v0.5.4...v0.5.5) (2026-06-30)
+
+
+### Bug Fixes
+
+* Bringing up to modern go standards ([fbbfd46](https://github.com/monetr/hostess/commit/fbbfd46a89d0d9adb2657091a9c255602382567f))
+* spelling ([017b8f3](https://github.com/monetr/hostess/commit/017b8f33a48b991bb2b8ceb3b8f9a8fd693f181c))
+* spelling ([6426b1e](https://github.com/monetr/hostess/commit/6426b1e7c671141a077485d8caebfac63f6257c6))
+* **test:** Fixing tests in CI/CD ([2e6a2f8](https://github.com/monetr/hostess/commit/2e6a2f8a09cd4ec1b2e74229ae9008d393438af8))
+
+
+### Miscellaneous
+
+* **main:** release 0.5.3 ([#2](https://github.com/monetr/hostess/issues/2)) ([81dbe87](https://github.com/monetr/hostess/commit/81dbe87b6b9a3d213fc4455f954069d35a21cfa8))
+* **main:** release 0.5.4 ([#4](https://github.com/monetr/hostess/issues/4)) ([ab81dcb](https://github.com/monetr/hostess/commit/ab81dcb51ee0828df8b137ee1c2536723985b8f9))
+* Tweaking readme ([7994ad1](https://github.com/monetr/hostess/commit/7994ad148f19d1eeb4b6cb2ea98f1c4f5e027522))
+* Updating paths ([0d7b015](https://github.com/monetr/hostess/commit/0d7b015d700b01e61d9cbe2e210e81605b1e71bc))
+
+
+### Refactor
+
+* Bringing into my own patterns ([513748d](https://github.com/monetr/hostess/commit/513748df568a0a3a74e5d316f8fa6dd7245f6cf9))
+
+
+### Build Automation
+
+* Upgrading to go 1.25 ([855b48c](https://github.com/monetr/hostess/commit/855b48cb4658ba68ae3e0708d1578ed4842ae2bf))
+
 ## [0.5.4](https://github.com/monetr/hostess/compare/v0.5.3...v0.5.4) (2026-06-30)
 
 
