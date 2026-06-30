@@ -1,0 +1,8 @@
+# Force LF in the working tree on every platform. A few tests in
+# hostess/testdata compare fixture files byte-for-byte against output the code
+# builds with \n (TestFormatLinux / TestFormatWindows in
+# hostess/hostlist_test.go). Without this git's autocrlf default rewrites those
+# fixtures to CRLF when CI checks them out on Windows, so the comparison fails
+# even though the visible text is identical. text=auto still lets git detect
+# binaries so they are left alone.
+* text=auto eol=lf
