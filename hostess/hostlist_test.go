@@ -3,8 +3,8 @@ package hostess_test
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"net"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -107,7 +107,7 @@ func TestFormatLinux(t *testing.T) {
 		t.Fatal(errs)
 	}
 
-	expected, err := ioutil.ReadFile(filepath.Join("testdata", "expected-linux"))
+	expected, err := os.ReadFile(filepath.Join("testdata", "expected-linux"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -129,7 +129,7 @@ func TestFormatWindows(t *testing.T) {
 		t.Fatal(errs)
 	}
 
-	expected, err := ioutil.ReadFile(filepath.Join("testdata", "expected-windows"))
+	expected, err := os.ReadFile(filepath.Join("testdata", "expected-windows"))
 	if err != nil {
 		t.Fatal(err)
 	}

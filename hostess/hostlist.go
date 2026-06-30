@@ -96,17 +96,14 @@ func (h Hostlist) Less(A, B int) bool {
 	// Prep for sorting by domain name
 	aLength := len(h[A].Domain)
 	bLength := len(h[B].Domain)
-	max := aLength
-	if bLength > max {
-		max = bLength
-	}
+	longest := max(aLength, bLength)
 
 	// Sort domains alphabetically
 	// TODO: This works best if domains are lowercased. However, we do not
 	// enforce lowercase because of UTF-8 domain names, which may be broken by
 	// case folding. There is a way to do this correctly but it's complicated
 	// so I'm not going to do it right now.
-	for charIndex := 0; charIndex < max; charIndex++ {
+	for charIndex := range longest {
 		// This index is longer than A, so A is shorter. A wins!
 		if charIndex >= aLength {
 			return true
@@ -403,11 +400,11 @@ func (h *Hostlist) FormatLinux() []byte {
 		// Finally, if the bucket contains anything, concatenate it all
 		// together and append it to the output. Also add a newline.
 		if len(enabledIPs) > 0 {
-			out.WriteString(fmt.Sprintf("%s %s\n", IP.String(), strings.Join(enabledIPs, " ")))
+			fmt.Fprintf(&out, "%s %s\n", IP.String(), strings.Join(enabledIPs, " "))
 		}
 
 		if len(disabledIPs) > 0 {
-			out.WriteString(fmt.Sprintf("# %s %s\n", IP.String(), strings.Join(disabledIPs, " ")))
+			fmt.Fprintf(&out, "# %s %s\n", IP.String(), strings.Join(disabledIPs, " "))
 		}
 	}
 

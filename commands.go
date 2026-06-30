@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -19,7 +18,7 @@ type Options struct {
 
 // PrintErrLn will print to stderr followed by a newline
 func PrintErrLn(err error) {
-	os.Stderr.WriteString(fmt.Sprintf("%s\n", err))
+	fmt.Fprintln(os.Stderr, err)
 }
 
 // LoadHostfile will try to load, parse, and return a Hostfile. If we
@@ -59,7 +58,7 @@ func SaveOrPreview(options *Options, hostfile *hostess.Hostfile) error {
 	}
 
 	if err := hostfile.Save(); err != nil {
-		return fmt.Errorf("Unable to write to %s. (error: %s)", hostess.GetHostsPath(), err)
+		return fmt.Errorf("Unable to write to %s. (error: %w)", hostess.GetHostsPath(), err)
 	}
 
 	return nil
@@ -174,7 +173,7 @@ func Disable(options *Options, hostname string) error {
 	}
 
 	if err := hostsfile.Hosts.Disable(hostname); err != nil {
-		if err == hostess.ErrHostnameNotFound {
+		if errors.Is(err, hostess.ErrHostnameNotFound) {
 			// If the hostname does not exist then we have still achieved the
 			// desired result, so we will not exit with an error here. We'll
 			// handle the error by displaying it to the user.
@@ -251,15 +250,15 @@ func Dump(options *Options) error {
 		return err
 	}
 
-	fmt.Println(fmt.Sprintf("%s", jsonbytes))
+	fmt.Printf("%s\n", jsonbytes)
 	return nil
 }
 
 // Apply command adds hostnames to the hosts file from JSON
 func Apply(options *Options, filename string) error {
-	jsonbytes, err := ioutil.ReadFile(filename)
+	jsonbytes, err := os.ReadFile(filename)
 	if err != nil {
-		return fmt.Errorf("Unable to read JSON from %s: %s", filename, err)
+		return fmt.Errorf("Unable to read JSON from %s: %w", filename, err)
 	}
 
 	hostfile, err := LoadHostfile(options)
@@ -268,7 +267,7 @@ func Apply(options *Options, filename string) error {
 	}
 
 	if err := hostfile.Hosts.Apply(jsonbytes); err != nil {
-		return fmt.Errorf("Error applying changes to hosts file: %s", err)
+		return fmt.Errorf("Error applying changes to hosts file: %w", err)
 	}
 
 	if err := SaveOrPreview(options, hostfile); err != nil {

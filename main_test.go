@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -34,7 +33,7 @@ func CopyHostsFile(t *testing.T, fixtureFiles ...string) (string, func()) {
 		t.Fatal(err)
 	}
 
-	temp, err := ioutil.TempFile("", "hostess-test-*")
+	temp, err := os.CreateTemp("", "hostess-test-*")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,7 +62,7 @@ func TestFormat(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := ioutil.ReadFile(temp)
+	data, err := os.ReadFile(temp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -112,7 +111,7 @@ func TestAddHostname(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := ioutil.ReadFile(temp)
+	data, err := os.ReadFile(temp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -162,7 +161,7 @@ func TestRemoveHostname(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := ioutil.ReadFile(temp)
+	data, err := os.ReadFile(temp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -205,7 +204,7 @@ func TestHostnameOff(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := ioutil.ReadFile(temp)
+	data, err := os.ReadFile(temp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -245,7 +244,7 @@ func TestExitCodeFmt(t *testing.T) {
 	temp, cleanup := CopyHostsFile(t, filepath.Join("testdata", "issue39"))
 	defer cleanup()
 
-	state1, err := ioutil.ReadFile(temp)
+	state1, err := os.ReadFile(temp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -256,7 +255,7 @@ func TestExitCodeFmt(t *testing.T) {
 		t.Fatalf(`Expected %q, found %v`, ErrParsingHostsFile, err)
 	}
 
-	state2, err := ioutil.ReadFile(temp)
+	state2, err := os.ReadFile(temp)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -279,7 +278,7 @@ func TestExitCodeFmt(t *testing.T) {
 `
 	}
 
-	state3, err := ioutil.ReadFile(temp)
+	state3, err := os.ReadFile(temp)
 	if err != nil {
 		t.Fatal(err)
 	}

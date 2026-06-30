@@ -3,7 +3,6 @@ package hostess_test
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -221,7 +220,7 @@ func TestSaveHostfile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	tempfile, err := ioutil.TempFile("", "hostess-test-*")
+	tempfile, err := os.CreateTemp("", "hostess-test-*")
 	if err != nil {
 		t.Fatal(err)
 	}
