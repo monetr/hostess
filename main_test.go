@@ -150,6 +150,59 @@ ff02::2 ip6-allrouters
 	}
 }
 
+func TestAddMultipleHostnames(t *testing.T) {
+	temp, cleanup := CopyHostsFile(t)
+	defer cleanup()
+
+	// myapp.local already exists at 127.0.0.1 so it should be moved, the
+	// others are new.
+	if err := wrappedMain(strings.Split("hostess add api.local myapp.local web.local 10.20.0.23", " ")); err != nil {
+		t.Fatal(err)
+	}
+
+	data, err := os.ReadFile(temp)
+	if err != nil {
+		t.Fatal(err)
+	}
+	output := string(data)
+
+	expected := `127.0.0.1 localhost
+127.0.1.1 ubuntu
+10.20.0.23 api.local myapp.local web.local
+192.168.0.30 raspberrypi
+::1 ip6-localhost ip6-loopback
+fe00:: ip6-localnet
+ff00:: ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+`
+
+	if runtime.GOOS == "windows" {
+		expected = `127.0.0.1 localhost
+127.0.1.1 ubuntu
+10.20.0.23 api.local
+10.20.0.23 myapp.local
+10.20.0.23 web.local
+192.168.0.30 raspberrypi
+::1 ip6-localhost
+::1 ip6-loopback
+fe00:: ip6-localnet
+ff00:: ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+`
+	}
+
+	if output != expected {
+		t.Errorf("--- Expected ---\n%s\n--- Found ---\n%s\n", expected, output)
+	}
+
+	// A single argument is not enough, we need at least one hostname and an IP.
+	if err := wrappedMain(strings.Split("hostess add 10.20.0.23", " ")); err == nil {
+		t.Error("expected a usage error when add is given only an IP")
+	}
+}
+
 func TestRemoveHostname(t *testing.T) {
 	temp, cleanup := CopyHostsFile(t)
 	defer cleanup()
