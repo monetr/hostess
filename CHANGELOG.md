@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.6.0](https://github.com/monetr/hostess/compare/v0.5.4...v0.6.0) (2026-11-27)
+
+
+### Features
+
+* Allow multiple hosts per command ([#6](https://github.com/monetr/hostess/issues/6)) ([41e4d90](https://github.com/monetr/hostess/commit/41e4d90c1dc9e4f160fd884b3f782fccc9d8b6a2))
+
 ## [0.5.4](https://github.com/monetr/hostess/compare/v0.5.3...v0.5.4) (2026-06-30)
 
 
