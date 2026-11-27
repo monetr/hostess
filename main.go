@@ -17,7 +17,8 @@ Commands
 
     fmt                  Reformat the hosts file
 
-    add <hostname> <ip>  Add or overwrite a hosts entry
+    add <hostname>... <ip>
+                         Add or overwrite hosts entries, all pointing at <ip>
     rm <hostname>        Remote a hosts entry
     on <hostname>        Enable a hosts entry
     off <hostname>       Disable a hosts entry
@@ -123,10 +124,11 @@ func wrappedMain(args []string) error {
 		return Format(options)
 
 	case "add":
-		if len(cli.Args()) != 2 {
-			return fmt.Errorf("Usage: %s add <hostname> <ip>", cli.Name())
+		if len(cli.Args()) < 2 {
+			return fmt.Errorf("Usage: %s add <hostname> [<hostname>...] <ip>", cli.Name())
 		}
-		return Add(options, cli.Arg(0), cli.Arg(1))
+		addArgs := cli.Args()
+		return Add(options, addArgs[:len(addArgs)-1], addArgs[len(addArgs)-1])
 
 	case "rm":
 		if cli.Arg(0) == "" {

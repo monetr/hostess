@@ -74,21 +74,33 @@ func StrPadRight(input string, length int) string {
 	return input + strings.Repeat(" ", length-minimum)
 }
 
-// Add command parses <hostname> <ip> and adds or updates a hostname in the
-// hosts file
-func Add(options *Options, hostname, ip string) error {
+// Add command parses <hostname>... <ip> and adds or updates each hostname in
+// the hosts file, pointing all of them at the same IP.
+func Add(options *Options, hostnames []string, ip string) error {
 	hostsfile, err := LoadHostfile(options)
-
-	newHostname, err := hostess.NewHostname(hostname, ip, true)
 	if err != nil {
 		return err
 	}
 
-	replaced := hostsfile.Hosts.ContainsDomain(newHostname.Domain)
-	// Note that Add() may return an error, but they are informational only. We
-	// don't actually care what the error is -- we just want to add the
-	// hostname and save the file. This way the behavior is idempotent.
-	hostsfile.Hosts.Add(newHostname)
+	// Validate every hostname before touching the hostfile so a bad argument
+	// doesn't leave us with a partially applied change.
+	newHostnames := make([]*hostess.Hostname, 0, len(hostnames))
+	for _, hostname := range hostnames {
+		newHostname, err := hostess.NewHostname(hostname, ip, true)
+		if err != nil {
+			return err
+		}
+		newHostnames = append(newHostnames, newHostname)
+	}
+
+	replaced := make([]bool, len(newHostnames))
+	for i, newHostname := range newHostnames {
+		replaced[i] = hostsfile.Hosts.ContainsDomain(newHostname.Domain)
+		// Note that Add() may return an error, but they are informational only.
+		// We don't actually care what the error is -- we just want to add the
+		// hostname and save the file. This way the behavior is idempotent.
+		hostsfile.Hosts.Add(newHostname)
+	}
 
 	// If the user passes -n then we'll Add and show the new hosts file, but
 	// not save it.
@@ -99,10 +111,12 @@ func Add(options *Options, hostname, ip string) error {
 	// updated, but if the user wants to know they can use has or ls to
 	// show the file before they run the operation. Maybe later we can add
 	// a verbose flag to show more information.
-	if replaced {
-		fmt.Printf("Updated %s\n", newHostname.FormatHuman())
-	} else {
-		fmt.Printf("Added %s\n", newHostname.FormatHuman())
+	for i, newHostname := range newHostnames {
+		if replaced[i] {
+			fmt.Printf("Updated %s\n", newHostname.FormatHuman())
+		} else {
+			fmt.Printf("Added %s\n", newHostname.FormatHuman())
+		}
 	}
 
 	return nil
